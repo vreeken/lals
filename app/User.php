@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Traits\HasRoles;
 
 use Laravel\Cashier\Billable;
 
@@ -14,6 +15,7 @@ class User extends Authenticatable
 {
 	use Notifiable;
 	use Billable;
+	use HasRoles;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -47,11 +49,11 @@ class User extends Authenticatable
 		parent::boot();
 
 		static::created(function ($user) {
-			$user->profile()->create([
+			/*$user->profile()->create([
 				'title' => $user->username,
-			]);
+			]);*/
 
-			Mail::to($user->email)->send(new NewUserWelcomeMail());
+			//Mail::to($user->email)->send(new NewUserWelcomeMail());
 		});
 	}
 
