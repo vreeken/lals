@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,16 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    //protected $redirectTo = '/member';
+
+	public function redirectTo() {
+		$user = Auth::user();
+		if($user->hasAnyRole(['super admin', 'web admin', 'blog admin', 'forum admin', 'membership admin', 'financial admin'])) {
+			return '/admin';
+		}
+
+		return '/member';
+	}
 
     /**
      * Create a new controller instance.
