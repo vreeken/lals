@@ -11,11 +11,30 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Auth::routes();
+
+Route::get('/setuproles', 'PublicController@setupRoles');
+
+Route::get('/', 'PublicController@showPage');
+
+Route::group(['middleware' => 'auth'], function() {
+		Route::get('/members/account', 'MembersController@index');
+		Route::get('/members/{member}', 'MembersController@');
+
+	Route::group(['prefix' => 'admin',  'middleware' => ['role:super admin|web admin|blog admin|forum admin|membership admin|financial admin']], function() {
+		Route::get('/', 'AdminController@index');
+	});
+
+	Route::group(['middleware' => ['role:super admin|web admin']], function() {
+		Route::post('/edit/page', 'WebAdminController@storeEditPage');
+		Route::get('/edit', 'WebAdminController@showEditPage');
+		Route::get('/edit/{path}', 'WebAdminController@showEditPage');
+
+		Route::post('admin/images/new', 'WebAdminController@createImage');
+	});
 });
 
-Auth::routes();
+
 
 /*use App\Mail\NewUserWelcomeMail;
 
