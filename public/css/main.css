@@ -1,0 +1,18 @@
+.tox-notifications-container {display:none!important;}
+
+.tinymce-container {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.tinymce-container > div {
+	flex: 1;
+}
+
+.tox-collection__item[title="Font sizes"] {
+	display: none !important;
+}/*
+.tox-dropzone-container::before {
+	content: '<input type="text" placeholder="temp" />';
+}*/
