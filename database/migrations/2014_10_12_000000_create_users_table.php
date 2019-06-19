@@ -35,11 +35,11 @@ class CreateUsersTable extends Migration
 			 */
 
 			//Phone and Address
-            $table->integer('phone');
-			$table->integer('phone_ext');
+            $table->string('phone', 10);
+			$table->string('phone_ext', 10)->nullable();
             $table->string('address_1');
-			$table->string('address_2')->default("");
-			$table->string('address_3')->default("");
+			$table->string('address_2')->nullable();
+			$table->string('address_3')->nullable();
 			$table->string('city');
 			$table->string('state');
 			$table->string('zip');

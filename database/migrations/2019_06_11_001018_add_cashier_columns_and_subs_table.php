@@ -13,7 +13,7 @@ class AddCashierColumnsAndSubsTable extends Migration
      */
     public function up()
     {
-		Schema::table('users', function (Blueprint $table) {
+		/*Schema::table('users', function (Blueprint $table) {
 			$table->string('stripe_id')->nullable()->collation('utf8mb4_bin');
 			$table->string('card_brand')->nullable();
 			$table->string('card_last_four', 4)->nullable();
@@ -30,7 +30,7 @@ class AddCashierColumnsAndSubsTable extends Migration
 			$table->timestamp('trial_ends_at')->nullable();
 			$table->timestamp('ends_at')->nullable();
 			$table->timestamps();
-		});
+		});*/
     }
 
     /**
@@ -40,6 +40,6 @@ class AddCashierColumnsAndSubsTable extends Migration
      */
     public function down()
     {
-		Schema::dropIfExists('subscriptions');
+		/*Schema::dropIfExists('subscriptions');*/
     }
 }
