@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewUserWelcomeMail extends Mailable
+class WelcomeToLALSRM extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,6 +28,8 @@ class NewUserWelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.welcome-email');
+        return $this
+			->subject('Welcome to LALSRM')
+			->markdown('emails.welcome-email');
     }
 }
