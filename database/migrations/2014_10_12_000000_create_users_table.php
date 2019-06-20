@@ -52,6 +52,8 @@ class CreateUsersTable extends Migration
 			$table->unsignedBigInteger('membership_verified_by')->nullable();
 			$table->timestamp('membership_verified_at')->nullable();
 
+			$table->string('stripe_id')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
