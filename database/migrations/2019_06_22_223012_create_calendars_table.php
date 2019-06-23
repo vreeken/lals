@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Web\Calendar;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCalendarEventsTable extends Migration
+class CreateCalendarsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +14,14 @@ class CreateCalendarEventsTable extends Migration
      */
     public function up()
     {
-        Schema::create('calendar_events', function (Blueprint $table) {
+        Schema::create('calendars', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->unsignedTinyInteger('calendar_id');
-			$table->unsignedBigInteger('user_id');
             $table->string('title');
-			$table->string('description')->nullable();
-			$table->string('url')->nullable();
-            $table->dateTime('starts_at');
-            $table->dateTime('ends_at');
-			//$table->boolean('is_all_day')->default(false);
+            $table->unsignedTinyInteger('permission'); //0=public, 1=members, 2=admins
             $table->timestamps();
         });
+
+		Calendar::insertDefaultCalendars();
     }
 
     /**
@@ -34,6 +31,6 @@ class CreateCalendarEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calendar_events');
+        Schema::dropIfExists('calendars');
     }
 }
