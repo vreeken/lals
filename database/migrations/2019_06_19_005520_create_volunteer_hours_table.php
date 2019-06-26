@@ -15,6 +15,9 @@ class CreateVolunteerHoursTable extends Migration
     {
         Schema::create('volunteer_hours', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedInteger('hours');
+            $table->date('date_worked');
             $table->timestamps();
         });
     }

@@ -15,8 +15,9 @@ class CreateInvalidInvoiceWebhooksTable extends Migration
     {
         Schema::create('invalid_invoice_webhooks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('invoice_id');
-            $table->text('raw_stripe_data');
+            $table->string('invoice_id')->nullable();
+            $table->string('reason')->nullable();
+            $table->text('raw_stripe_data')->nullable();
             $table->timestamps();
         });
     }

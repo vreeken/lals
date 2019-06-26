@@ -39,10 +39,9 @@ class CreateUsersTable extends Migration
 			$table->string('phone_ext', 10)->nullable();
             $table->string('address_1');
 			$table->string('address_2')->nullable();
-			$table->string('address_3')->nullable();
 			$table->string('city');
 			$table->string('state');
-			$table->string('zip');
+			$table->string('postal_code');
 
 			//Who verified the member as eligible to be a probationary member and when
 			$table->unsignedBigInteger('probation_verified_by')->nullable();
