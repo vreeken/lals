@@ -16,7 +16,7 @@ class RolesPermissionsTest extends TestCase {
 		Role::create(['name' => 'super admin']);
 		$user->assignRole('super admin');
 
-		$this->get('/admins')
+		$this->get('/admin')
 			->assertSee('Admin Dashboard');
     }
 
@@ -26,7 +26,7 @@ class RolesPermissionsTest extends TestCase {
 
 		$this->signIn($user);
 
-		$this->get('/admins')
+		$this->get('/admin')
 			->assertStatus(403);
 	}
 
