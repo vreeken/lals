@@ -1,48 +1,89 @@
+<link rel="stylesheet" href="../../../../fe/coalition_tech.css">
 <template>
 	<form novalidate @submit="onSubmit">
 
 		<div class="form-group" v-for="(f, i) in formElements" :id="'ig'+i" :key="'ig'+i" :label="f.label" :description="f.description || ''">
-			<label :for="f.name" v-html="f.label"></label>
-			<select
-					v-if="f.type == 'select'"
-					class="form-control"
-					:id="f.name"
-					:name="f.name"
-					v-model="f.value"
-					:options="f.options"
-					v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}"
-					@input="onInputHandler(f)"
-			>
-				<option v-for="option in f.options" v-bind:value="option.value" >{{ option.text }}</option>
-			</select>
-			<input
-					v-else
-					class="form-control"
-					:id="f.name"
-					:name="f.name"
-					:type="f.type"
-					:placeholder="f.label"
-					v-model="f.value"
-					v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}"
-					@input="onInputHandler(f)"
-			></input>
+
+			<div v-if="f.type === 'dateTime'">
+				<label class="form-check-label" :for="f.name" v-html="f.label"></label>
+				<VueCtkDateTimePicker :id="f.name" :label="f.label" v-model="f.value" noLabel format="YYYY-MM-DD HH:mm" v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}" @input="onInputHandler(f)"/>
+			</div>
+
+			<div v-else-if="f.type === 'date'">
+				<label class="form-check-label" :for="f.name" v-html="f.label"></label>
+				<VueCtkDateTimePicker :id="f.name" :label="f.label" v-model="f.value" noLabel format="hh:mm a" formatted="hh:mm a" v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}" @input="onInputHandler(f)"/>
+			</div>
+
+			<div v-else-if="f.type === 'time'">
+				<label class="form-check-label" :for="f.name" v-html="f.label"></label>
+				<VueCtkDateTimePicker :id="f.name" :label="f.label" v-model="f.value" noLabel format="YYYY-MM-DD" formatted="ll" v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}" @input="onInputHandler(f)"/>
+			</div>
+
+			<div v-else-if="f.type == 'checkbox'" class="form-check">
+				<input
+						class="form-check-input"
+						:id="f.name"
+						:name="f.name"
+						:type="f.type"
+						:placeholder="f.label"
+						v-model="f.value"
+						v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}"
+						@input="onInputHandler(f)"
+				/>
+				<label class="form-check-label" :for="f.name" v-html="f.label"></label>
+			</div>
+			<div v-else-if="f.type == 'select'">
+				<label :for="f.name" v-html="f.label"></label>
+				<select
+						class="form-control"
+						:id="f.name"
+						:name="f.name"
+						v-model="f.value"
+						:options="f.options"
+						v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}"
+						@input="onInputHandler(f)"
+				>
+					<option value="" >Select a Calendar</option>
+					<option v-for="option in f.options" v-bind:value="option.id" >{{ option.title }}</option>
+				</select>
+			</div>
+			<div v-else>
+				<label :for="f.name" v-html="f.label"></label>
+				<input
+						class="form-control"
+						:id="f.name"
+						:name="f.name"
+						:type="f.type"
+						:placeholder="f.label"
+						v-model="f.value"
+						v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}"
+						@input="onInputHandler(f)"
+				/>
+			</div>
 			<div v-show="f.error" v-html="f.error"></div>
+
+			<div class="mb-3 text-danger" v-show="formErrorsString.length" v-html="formErrorsString"></div>
+			<button type="submit" class="btn btn-primary" :disabled="ajaxing" v-html="submitButtonText"></button>
+
 		</div>
-
-		<div class="mb-3 text-danger" v-show="formErrorsString.length" v-html="formErrorsString"></div>
-		<button type="submit" class="btn btn-primary" :disabled="ajaxing">Register</button>
-
 	</form>
 </template>
 
 <script>
-	const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	const STATES = [{text:'Select State', value: null },{"text":"Alabama","value":"AL"},{"text":"Alaska","value":"AK"},{"text":"American Samoa","value":"AS"},{"text":"Arizona","value":"AZ"},{"text":"Arkansas","value":"AR"},{"text":"California","value":"CA"},{"text":"Colorado","value":"CO"},{"text":"Connecticut","value":"CT"},{"text":"Delaware","value":"DE"},{"text":"District Of Columbia","value":"DC"},{"text":"Federated States Of Micronesia","value":"FM"},{"text":"Florida","value":"FL"},{"text":"Georgia","value":"GA"},{"text":"Guam","value":"GU"},{"text":"Hawaii","value":"HI"},{"text":"Idaho","value":"ID"},{"text":"Illinois","value":"IL"},{"text":"Indiana","value":"IN"},{"text":"Iowa","value":"IA"},{"text":"Kansas","value":"KS"},{"text":"Kentucky","value":"KY"},{"text":"Louisiana","value":"LA"},{"text":"Maine","value":"ME"},{"text":"Marshall Islands","value":"MH"},{"text":"Maryland","value":"MD"},{"text":"Massachusetts","value":"MA"},{"text":"Michigan","value":"MI"},{"text":"Minnesota","value":"MN"},{"text":"Mississippi","value":"MS"},{"text":"Missouri","value":"MO"},{"text":"Montana","value":"MT"},{"text":"Nebraska","value":"NE"},{"text":"Nevada","value":"NV"},{"text":"New Hampshire","value":"NH"},{"text":"New Jersey","value":"NJ"},{"text":"New Mexico","value":"NM"},{"text":"New York","value":"NY"},{"text":"North Carolina","value":"NC"},{"text":"North Dakota","value":"ND"},{"text":"Northern Mariana Islands","value":"MP"},{"text":"Ohio","value":"OH"},{"text":"Oklahoma","value":"OK"},{"text":"Oregon","value":"OR"},{"text":"Palau","value":"PW"},{"text":"Pennsylvania","value":"PA"},{"text":"Puerto Rico","value":"PR"},{"text":"Rhode Island","value":"RI"},{"text":"South Carolina","value":"SC"},{"text":"South Dakota","value":"SD"},{"text":"Tennessee","value":"TN"},{"text":"Texas","value":"TX"},{"text":"Utah","value":"UT"},{"text":"Vermont","value":"VT"},{"text":"Virgin Islands","value":"VI"},{"text":"Virginia","value":"VA"},{"text":"Washington","value":"WA"},{"text":"West Virginia","value":"WV"},{"text":"Wisconsin","value":"WI"},{"text":"Wyoming","value":"WY"}];
-
+	//TODO extend this component
+	//https://vuejsdevelopers.com/2017/06/11/vue-js-extending-components/
 	export default {
 		data() {
 			return {
+				EMAIL_REGEX: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+				URL_REGEX: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+
+				submitButtonText: 'Submit',
+
+				submitUrl: window.location.href,
+
 				formElements: [
+					/*
 					{label: "First Name", 		type: "text", 		name: "first_name", 				value: '', 		touched: false, error: null, validator: {required: true}},
 					{label: "Last Name", 		type: "text", 		name: "last_name", 					value: '', 		touched: false, error: null, validator: {required: true}},
 					{label: "Email", 			type: "email", 		name: "email", 						value: '', 		touched: false, error: null, validator: {required: true, type: "email"}},
@@ -57,6 +98,7 @@
 					{label: "State", 			type: "select", 	name: "state", 						value: null, 	touched: false, error: null, validator: {required: true}, options: STATES},
 					{label: "Zip Code", 		type: "text", 		name: "postal_code",				value: '', 		touched: false, error: null, validator: {required: true, min: 5}},
 					{label: "Passcode", 		type: "text", 		name: "passcode", 					value: '', 		touched: false, error: null, validator: {required: true}},
+					*/
 				],
 				formErrorsString: '',
 				ajaxing: false
@@ -86,23 +128,26 @@
 				}
 				//Flag ajaxing as true to disable the Submit button
 				this.ajaxing=true;
-				axios.post("/register", data)
+				axios.post(this.submitUrl, data)
 					.then(response => {
 						if (response.data && response.data.success) {
-							window.location = response.data.redirect ? response.data.redirect : '/';
+							this.successCallback();
 						}
 						else {
 							console.log("Error");
 							console.log(response);
 							this.showServerErrors([], "An unknown error occurred. Please try again.");
+							this.$noty.error("Oops, something went wrong! Please try again.");
 						}
 					})
 					.catch(error => {
 						if (error.response.status === 422) {
 							this.showServerErrors(error.response.data.errors);
+							this.$noty.error("Oops, something went wrong! Please try again.");
 						}
 						else {
 							this.showServerErrors([], "An unknown error occurred. Please try again.");
+							this.$noty.error("Oops, something went wrong! Please try again.");
 						}
 						console.log("ERROR");
 						console.log(error.response.status);
@@ -133,6 +178,22 @@
 				//Validate the input after every input event trigger
 				Vue.nextTick(() => {
 					this.validate(formElement);
+
+					//If we currently have an invalid form error message, lets loop over every element and see if
+					// we're now valid, and if so remove the error msg
+					if (this.formErrorsString.length) {
+						let valid=true;
+						for (let i=0; i<this.formElements.length; i++) {
+							if (this.formElements[i].error) {
+								valid=false;
+								break;
+							}
+						}
+						if (valid) {
+							this.formErrorsString = '';
+						}
+					}
+
 				});
 
 			},
@@ -163,7 +224,7 @@
 					//Must be a valid email address
 					if (validator.type === "email") {
 						//Test against our email regex
-						if (!EMAIL_REGEX.test(formElement.value.toLowerCase())) {
+						if (!this.EMAIL_REGEX.test(formElement.value.toLowerCase())) {
 							formElement.error = "Please input a valid email address";
 							return false;
 						}
@@ -182,6 +243,22 @@
 						//Make sure we have exactly 10 numeric digits, not including the US country code of +1
 						if (parsed.length !== 10) {
 							formElement.error = "Please input a valid phone number: 8001234567";
+							return false;
+						}
+					}
+
+					if (validator.type === "url") {
+						if (formElement.value.length>0) {
+							if (!this.URL_REGEX.test(formElement.value.toLowerCase())) {
+								formElement.error = "Please input a valid url beginning with http:// or https://";
+								return false;
+							}
+						}
+					}
+
+					if (validator.disable_future_dates) {
+						if (Dayjs(formElement.value).isAfter(Dayjs())) {
+							formElement.error = "You cannot input volunteer hours for a future date";
 							return false;
 						}
 					}
