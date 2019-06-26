@@ -75,10 +75,10 @@ class PublicController extends Controller
 	private function getAccessToken(){
 		$tokenURL = 'https://accounts.google.com/o/oauth2/token';
 		$postData = array(
-			'client_secret'=>'i2N4HQjZkGbava95dVJv1fFz',
+			'client_secret'=>env('GOOGLE_CLIENT_SECRET'),
 			'grant_type'=>'refresh_token',
-			'refresh_token'=>'1/c-_lt1oK2sIbAQx-7G7nMh8srh8_PaYR_xtHK5SU44E',
-			'client_id'=>'476121854780-2r1i7tjb5irgn76oo7udat7f1p2fp72r.apps.googleusercontent.com'
+			'refresh_token'=>env('GOOGLE_REFRESH_TOKEN'),
+			'client_id'=>env('GOOGLE_CLIENT_ID')
 		);
 
 		$ch = curl_init();
