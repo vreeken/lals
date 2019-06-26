@@ -1,9 +1,12 @@
 @component('mail::message')
-# Welcome to freeCodeGram
+# Welcome to LALSRM
 
-This is a community of fellow developers and we love that you have joined us.
+We are grateful you have joined us as a member.
 
+@component('mail::button', ['url' => env('APP_URL')])
+	Log in to LALSRM.org
+@endcomponent
 
 All the best,<br>
-Victor
+Mike
 @endcomponent
