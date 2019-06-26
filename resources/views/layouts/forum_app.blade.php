@@ -16,7 +16,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@if (trim($__env->yieldContent('title'))) @yield('title') @else {{ config('app.name', 'LALSRM') }} @endif</title>
+    <title>{{ config('app.name', 'LALS') }}</title>
 
     <!-- Scripts -->
     <script>
@@ -55,7 +55,7 @@
 </head>
 <body>
     <div id="app">
-        @include ('layouts.nav')
+        @include ('layouts.forum_nav')
 
 
         <main class="py-4">
