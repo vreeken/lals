@@ -1,35 +1,81 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('https://fonts.googleapis.com/css?family=Merriweather:400,700|Open+Sans:400,700');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import '~vuejs-noty/dist/vuejs-noty.css';
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/list/main.css';
 /*@import '~bootstrap/scss/bootstrap';*/
-
+/*
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import 'node_modules/bootstrap-vue/src/index.scss';
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+*/
+
 
 
 html, body {
 	font-family: $font-family-sans-serif;
 }
 
-.valid {
-  border-color: #38c172;
+
+.navbar-brand img {
+	height: 28px;
+	position: relative;
+	top: -2px;
+}
+div.dropdown-menu {
+	top: calc(100% + 0.5rem - 1px);
+	box-shadow: rgba(0, 0, 0, 0.176) 0px 8px 8px;
+	border-radius: 0 0 0.25rem 0.25rem;
+	border-top: 0;
+}
+.navbar-light .nav-link {
+	color: #222 !important;
+}
+.navbar-light .nav-item:hover, .navbar-light .navbar-brand:hover {
+	background-color: #f8f9fa;
+}
+
+
+.s-font,h1,h2,h3,h4,h5,h6 {
+	font-family: $font-family-serif;
+	font-weight: bold;
+}
+h1,h2,h3,h4,h5,h6 {
+	text-align: center;
+	width: 100%;
+}
+
+
+
+.form-control.valid {
+	border: 1px solid green !important;
   padding-right: calc(1.6em + 0.75rem);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8… 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+  /*background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8… 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");*/
   background-repeat: no-repeat;
   background-position: center right calc(0.4em + 0.1875rem);
   background-size: calc(0.8em + 0.375rem) calc(0.8em + 0.375rem);
 }
-.invalid {
-  border-color: #e3342f;
+.form-control.invalid {
+	border: 1px solid red !important;
   padding-right: calc(1.6em + 0.75rem);
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23e3342…%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
+  /*background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23e3342…%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");*/
     background-repeat: no-repeat;
     background-position: center right calc(0.4em + 0.1875rem);
     background-size: calc(0.8em + 0.375rem) calc(0.8em + 0.375rem);
+}
+.invalid input {
+	border: 1px solid red !important;
+}
+.valid input {
+	border: 1px solid green !important;
 }
 
 .valid.form-control:focus {
@@ -37,4 +83,21 @@ html, body {
 }
 .invalid.form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25);
+}
+
+
+
+
+
+
+
+
+
+.volunteer-hours-container {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+}
+.volunteer-hours-container > * {
+	width: 100%;
 }
