@@ -32,10 +32,9 @@ $factory->state('registerable', 'registerable', function (Faker $faker) {
 		'phone_ext' => '123',
 		'address_1' => "123 abc st",
 		'address_2' => '',
-		'address_3' => '',
 		'city' => $faker->city,
 		'state' => $faker->state,
-		'zip' => $faker->postcode,
+		'postal_code' => $faker->postcode,
         'remember_token' => Str::random(10),
 		'passcode' => 'lals'
     ];
@@ -54,10 +53,9 @@ $factory->define(App\Models\Members\User::class, function (Faker $faker) {
 		'phone_ext' => '123',
 		'address_1' => "123 abc st",
 		'address_2' => '',
-		'address_3' => '',
 		'city' => $faker->city,
 		'state' => $faker->state,
-		'zip' => $faker->postcode,
+		'postal_code' => $faker->postcode,
 		'remember_token' => Str::random(10)
 	];
 });
