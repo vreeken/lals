@@ -5,7 +5,7 @@
 
 			<div v-if="f.type ==='dateTime'">
 				<label class="form-check-label" :for="f.name" v-html="f.label"></label>
-				<VueCtkDateTimePicker :id="f.name" :label="f.label" v-model="f.value" format="YYYY-MM-DD HH:mm" v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}" @input="onInputHandler(f)"/>
+				<VueCtkDateTimePicker :id="f.name" :label="f.label" v-model="f.value" noLabel format="YYYY-MM-DD HH:mm" v-bind:class="{'invalid': f.touched && f.error !== null, 'valid': f.touched && f.error === null}" @input="onInputHandler(f)"/>
 			</div>
 
 			<div v-else-if="f.type == 'checkbox'" class="form-check">
