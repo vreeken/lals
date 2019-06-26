@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\User;
+use App\Models\Forum\Channel;
+use App\Models\Members\User;
 use Illuminate\Http\Request;
 
-use App\Page;
+use App\Models\Web\Page;
 
+use Illuminate\Support\Facades\Hash;
+use Storage;
+use Log;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Http\Controllers\Controller;
 
 class PublicController extends Controller
 {
@@ -24,8 +29,71 @@ class PublicController extends Controller
 
 
     	$page = Page::wherePath($path)->first();
-        return view('public', ['page'=>$page->content]);
+    	if (!$page) {
+			$default_page = str_replace("/","_",$path);
+			$page = new \stdClass();
+			$page->content = Storage::get('default_pages/'.$default_page.'.html');
+			$page->title = '';
+		}
+        return view('public', ['page'=>$page]);
     }
+
+
+
+	/*public function addUserToMemberCalendar(Request $request) {
+		$this->addMember();
+
+		return 'done';
+	}
+
+	private function addMember() {
+		$url = 'https://www.googleapis.com/calendar/v3/calendars/pmr28okb56p0ht55a4qhu93tfs@group.calendar.google.com/acl?key=AIzaSyA8iEZLEBOG1S-o_41h-k10oZ2sjsxy-XA';
+		$data = ["role" => "writer", "scope" => ["type" => "user", "value" => "svenjoypro@gmail.com"]];
+
+		$token = $this->getAccessToken();
+
+		$session = curl_init($url);
+
+		// Tell curl to use HTTP POST
+		curl_setopt ($session, CURLOPT_POST, true);
+		// Tell curl that this is the body of the POST
+		curl_setopt ($session, CURLOPT_POSTFIELDS, json_encode($data));
+		// Tell curl not to return headers, but do return the response
+		curl_setopt($session, CURLOPT_HEADER, true);
+		curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($session, CURLOPT_VERBOSE, true);
+		curl_setopt($session, CURLINFO_HEADER_OUT, true);
+		curl_setopt($session, CURLOPT_HTTPHEADER, array('Content-Type:  application/json','Authorization:  Bearer ' . $token,'X-JavaScript-User-Agent:  Mount Pearl Tennis Club Bookings'));
+
+		$response = curl_exec($session);
+
+		curl_close($session);
+
+		return $response;
+	}
+
+	private function getAccessToken(){
+		$tokenURL = 'https://accounts.google.com/o/oauth2/token';
+		$postData = array(
+			'client_secret'=>'i2N4HQjZkGbava95dVJv1fFz',
+			'grant_type'=>'refresh_token',
+			'refresh_token'=>'1/c-_lt1oK2sIbAQx-7G7nMh8srh8_PaYR_xtHK5SU44E',
+			'client_id'=>'476121854780-2r1i7tjb5irgn76oo7udat7f1p2fp72r.apps.googleusercontent.com'
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $tokenURL);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		$tokenReturn = curl_exec($ch);
+		$token = json_decode($tokenReturn);
+		//var_dump($tokenReturn);
+		$accessToken = $token->access_token;
+		return $accessToken;
+	}*/
+
 
     public function setupRoles(Request $request) {
 		/*
@@ -76,7 +144,7 @@ class PublicController extends Controller
 		 * 		Volunteer Hours Submissions
 		 * 		Forum Posting
 		 */
-		/*
+
 		$superAdmin = Role::create(['name' => 'super admin']);
 		$webAdmin = Role::create(['name' => 'web admin']);
 		$blogAdmin = Role::create(['name' => 'blog admin']);
@@ -124,9 +192,37 @@ class PublicController extends Controller
 		$member->syncPermissions([$memberDues, $memberInvoices, $memberProfile, $memberVolunteerHours, $memberPersonalBlog, $memberForum]);
 
 		//https://github.com/spatie/laravel-permission
-		*/
-		//$user = User::find(1)->assignRole('super admin');
-		return 'Already Done';
+
+		$user = User::create([
+			'first_name' => 'Mike',
+			'last_name' => 'Vreeken',
+			'email' => 'svenjoypro@gmail.com',
+			'username' => 'svenjoypro',
+			'password' => Hash::make('123456'),
+			'phone' =>  '8052467001',
+			'phone_ext' => '',
+			'address_1' => "123 abc st",
+			'address_2' => '',
+			'city' => 'Simi Valley',
+			'state' => 'CA',
+			'postal_code' => '93063'
+		]);
+
+		$user->assignRole('super admin');
+
+		$channels = [
+			['name' => 'For Sale', 'slug' => 'for-sale'],
+			['name' => 'Looking to Buy', 'slug' => 'looking-to-buy'],
+			['name' => 'Upcoming Events', 'slug' => 'events'],
+			['name' => 'General Questions', 'slug' => 'questions'],
+			['name' => 'General Chat', 'slug' => 'chat']
+		];
+
+		for ($i=0; $i<count($channels); $i++) {
+			Channel::create($channels[$i]);
+		}
+
+		return 'Done';
 
 	}
 }

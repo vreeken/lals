@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MemberBlog;
 
-use App\Post;
+use App\Models\MemberBlog\Post;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use App\Http\Controllers\Controller;
 
 class PostsController extends Controller
 {

@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Members;
 
-use App\User;
+use App\Models\Members\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
+use App\Http\Controllers\Controller;
 
 class MembersController extends Controller {
 
 	public function index(User $user) {
-		$follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+		/*$follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
 
 		$postCount = Cache::remember(
 			'count.posts.' . $user->id,
@@ -34,10 +35,23 @@ class MembersController extends Controller {
 				return $user->following->count();
 			});
 
-		return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));
+		return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));*/
+		return view('members.dashboard');
 	}
 
-	public function edit(User $user) {
+
+	public function showInvoices(Request $request) {
+		//$user = Auth::user();
+
+		return view('members.invoices');
+	}
+
+
+
+
+
+
+	/*public function edit(User $user) {
 		$this->authorize('update', $user->profile);
 
 		return view('profiles.edit', compact('user'));
@@ -68,5 +82,5 @@ class MembersController extends Controller {
 		));
 
 		return redirect("/profile/{$user->id}");
-	}
+	}*/
 }

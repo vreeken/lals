@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Members;
 
-use App\User;
+use App\Models\Members\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
+use App\Http\Controllers\Controller;
 
 class ProfilesController extends Controller
 {

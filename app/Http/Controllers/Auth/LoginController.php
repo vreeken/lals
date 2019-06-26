@@ -34,7 +34,7 @@ class LoginController extends Controller
 			return '/admin';
 		}
 
-		return '/member';
+		return '/members/account';
 	}
 
     /**

@@ -7,6 +7,7 @@ use App\Models\Financials\Invoice;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Log;
+use Auth;
 
 class InvoicesController extends Controller
 {
@@ -68,6 +69,27 @@ class InvoicesController extends Controller
 		]);
     }
 
+    public function requestInvoiceEmail(Request $request) {
+    	if (!$request->invoice_number) {
+    		return response()->json(['error'=>'Invalid Parameters'], 400);
+		}
+    	$in = $request->invoice_number;
+
+    	//TODO allow admins to do this as well
+    	$invoice = Invoice::where('invoice_number', $in)->where('user_id', Auth::user()->id)->first();
+
+    	if (!$invoice) {
+			return response()->json(['error'=>'Invalid Invoice'], 400);
+		}
+
+		\Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+		$invoice = \Stripe\Invoice::retrieve($invoice->stripe_invoice_id);
+		$invoice->sendInvoice();
+
+		return response()->json(['success'=>'Email sent']);
+	}
+
     public function manuallyMarkAsPaid() {
 
 	}
@@ -89,10 +111,18 @@ class InvoicesController extends Controller
     	$invoice = Invoice::where('stripe_invoice_id', $data['invoice'])->first();
     	//if not log and create InvalidInvoiceWebhook
     	if (!$invoice) {
-    		$iiw = InvalidInvoiceWebhook::create(['invoice_id' => $data['invoice'], 'raw_stripe_data' => json_encode($all)]);
+    		$iiw = InvalidInvoiceWebhook::create(['invoice_id' => $data['invoice'], 'reason' => 'Invalid Invoice Id', 'raw_stripe_data' => json_encode($all)]);
     		Log::error('Invalid invoice id from stripe webhook. InvalidInvoiceWebhook ID: '.$iiw->id . ' | Attempted Invoice Id: '.$data['invoice']);
 
     		//Let stripe know we handled the webhook
+			return response()->json(['success'=>'success'], 200);
+		}
+
+    	if ($invoice->paid_at !== null) {
+			$iiw = InvalidInvoiceWebhook::create(['invoice_id' => $data['invoice'], 'reason' => 'Invoice Already Paid', 'raw_stripe_data' => json_encode($all)]);
+			Log::error('Webhook from Stripe is for an invoice that is already paid for. InvalidInvoiceWebhook ID: '.$iiw->id . ' | Attempted Invoice Id: '.$data['invoice']);
+
+			//Let stripe know we handled the webhook
 			return response()->json(['success'=>'success'], 200);
 		}
 

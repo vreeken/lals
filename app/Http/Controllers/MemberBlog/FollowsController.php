@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MemberBlog;
 
-use App\User;
+use App\Models\MemberBlog\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class FollowsController extends Controller
 {
