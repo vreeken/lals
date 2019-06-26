@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('header')
+@section('head')
 	<script src="https://cdn.tiny.cloud/1/{{ env('TINY_MCE_API_KEY') }}/tinymce/5/tinymce.min.js"></script>
 	<script>
 		tinymce.init({
@@ -43,11 +43,15 @@
 	</script>
 @endsection
 
+
 @section('content')
-	<form class="tinymce-container" method="post" action="{{ url('edit/page') }}">
+	<form class="tinymce-container" style="flex-direction: column" method="post" action="{{ url('edit/page') }}">
 		@csrf
-		<input type="hidden" name="path" value="{{ $path }}" />
+		<input class="form-control mb-4" name="title" placeholder="Page Title" value="{{ $page->title }}" />
+
+		<input type="hidden" name="path" value="{{ $page->path }}" />
 		<textarea name="content">{!! $page->content !!}</textarea>
-		<button>Save</button>
+
+		<button class="btn btn-primary mt-4">Save</button>
 	</form>
 @endsection
