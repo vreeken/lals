@@ -50,7 +50,7 @@ class PublicController extends Controller
 		//Tutorial setting up oauth api and calendar keys
 		//https://cornempire.net/2011/12/31/part-1-setting-up-google-calendar/
 
-		$url = 'https://www.googleapis.com/calendar/v3/calendars/pmr28okb56p0ht55a4qhu93tfs@group.calendar.google.com/acl?key=AIzaSyA8iEZLEBOG1S-o_41h-k10oZ2sjsxy-XA';
+		$url = 'https://www.googleapis.com/calendar/v3/calendars/'. env('GOOGLE_CALENDAR_MEMBERS_ONLY') . '/acl?key=' . env('GOOGLE_API_KEY');
 		$data = ["role" => "writer", "scope" => ["type" => "user", "value" => "svenjoypro@gmail.com"]];
 
 		$token = $this->getAccessToken();
