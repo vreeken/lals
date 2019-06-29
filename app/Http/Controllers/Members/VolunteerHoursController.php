@@ -42,10 +42,12 @@ class VolunteerHoursController extends Controller
     {
 		$data = $request->only('hours', 'date_worked');
 
+		$err_messages = ['before' => 'The :attribute cannot be a future date'];
+
 		$validator = Validator::make($data, [
 			'hours' => ['required', 'integer'],
-			'date_worked' => ['required', 'date', 'before:today']
-		]);
+			'date_worked' => ['required', 'date', 'before:tomorrow']
+		], $err_messages);
 
 		if ($validator->fails()) {
 			if ($request->expectsJson()) {
