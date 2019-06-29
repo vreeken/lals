@@ -23,12 +23,14 @@ class WebAdminsController extends Controller
      */
     public function showEditPage(Request $request, $path='/') {
 
-    	$page = Page::firstOrNew(['path' => $path]);
+    	$page = Page::where('path', $path)->first();
 
-		$default_page = str_replace("/","_",$path);
-		$page->content = Storage::get('default_pages/'.$default_page.'.html');
-		$page->path = $path;
-		$page->save();
+    	if (!$page) {
+			$default_page = str_replace("/", "_", $path);
+			$page->content = Storage::get('default_pages/' . $default_page . '.html');
+			$page->path = $path;
+			$page->save();
+		}
 
         return view('admin.web.edit', ['page'=>$page]);
     }
