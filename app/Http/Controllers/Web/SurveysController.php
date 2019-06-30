@@ -2,85 +2,34 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\Web\Survey;
+use App\Models\Surveys\Survey;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class SurveysController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+	public function showSurveys() {
+		$surveys = Survey::where('ends_at', '>', Carbon::now())->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+		return view('surveys.show_all', ['surveys' => $surveys]);
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+	public function showSurvey(Survey $survey) {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Survey  $survey
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Survey $survey)
-    {
-        //
-    }
+		return view('surveys.show_survey', ['survey' => $survey]);
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Survey  $survey
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Survey $survey)
-    {
-        //
-    }
+	public function storeAnswer(Request $request) {
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Survey  $survey
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Survey $survey)
-    {
-        //
-    }
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Survey  $survey
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Survey $survey)
-    {
-        //
-    }
+	public function showCreateSurvey() {
+
+		return view('surveys.show_create');
+	}
+
+	public function storeSurvey(Request $request) {
+
+	}
 }
