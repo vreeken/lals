@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SurveyQuestion extends Model
 {
-	protected $fillable = ['question', 'survey_id'];
+	protected $guarded = [];
 
 	public function survey() {
 		return $this->belongsTo(Survey::class);
