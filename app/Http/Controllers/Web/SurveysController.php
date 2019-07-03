@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\Surveys\Survey;
+use App\Models\Surveys\SurveyAnswer;
 use App\Models\Surveys\SurveyQuestion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,16 +21,74 @@ class SurveysController extends Controller
 	}
 
 	public function showSurvey(Survey $survey) {
+		$s['survey_id'] = $survey->id;
 		$s['title'] = $survey->title;
 		$s['description'] = $survey->description;
 		$s['ends_at'] = $survey->ends_at;
 		$s['questions'] = json_decode($survey->questions);
 
+
 		return view('surveys.show_survey', ['survey' => $s]);
 	}
 
 	public function storeAnswer(Request $request) {
+		$results = $this->retrieveResultsBySurvey(1);
+		return response()->json(['success'=>'survey_answers_stored', 'results'=>$results]);
 
+		//TODO
+		//This currently lets a user submit multiple times, updating their previous answers
+		//The other option is to tell them they can't submit, because they've already done so
+		$data = $request->only('survey_id', 'answers');
+
+		$validator = Validator::make($data, [
+			'survey_id' => ['required', 'exists:surveys,id'],
+			'answers' => ['string', 'required', 'json']
+		]);
+
+		if ($validator->fails()) {
+			if ($request->expectsJson()) {
+				return response()->json(['errors' => $validator->errors()], 422);
+			}
+			else {
+				return redirect()->back()->withErrors($validator->errors());
+			}
+		}
+
+		$answers = json_decode($data['answers']);
+		$uid = Auth::user()->id;
+		$len = count($answers);
+
+		DB::beginTransaction();
+
+		for ($i=0; $i<$len; $i++) {
+			//TODO uncomment this to prevent dupes
+			/*$sa = SurveyAnswer::firstOrNew(
+				['survey_question_id' => $answers[$i]->qid, 'user_id' => $uid]
+			);*/
+			$sa = new SurveyAnswer;
+			$sa->survey_question_id = $answers[$i]->qid;
+			$sa->user_id = $uid;
+			$sa->survey_id = $data['survey_id'];
+			$sa->answer = is_array($answers[$i]->answer) ? json_encode($answers[$i]->answer) : $answers[$i]->answer;
+
+			if (!$sa->save()) {
+				DB::rollBack();
+				return response()->json(['error'=>'db_error'], 500);
+			}
+		}
+
+		DB::commit();
+
+		$results = $this->retrieveResultsBySurvey($data['survey_id']);
+
+		return response()->json(['success'=>'survey_answers_stored', 'results'=>$results]);
+	}
+
+	public function retrieveResultsBySurvey($survey_id) {
+		//$s = Survey::find($survey_id)->answers()->orderedByQuestion()->orderedByAnswer()->get();
+		$s = Survey::find($survey_id)->answers()->orderedByQuestion()->get();
+
+		return $s;
 	}
 
 	public function showCreateSurvey() {
