@@ -21,4 +21,10 @@ class Survey extends Model
 	public function answers() {
 		return $this->hasMany(SurveyAnswer::class);
 	}
+	/*public function scopeGroupedByQuestion($query) {
+		return $query->groupBy('survey_quesion_id');
+	}
+	public function answersGroupedByQuestion() {
+		return $this->hasMany(SurveyAnswer::class);
+	}*/
 }

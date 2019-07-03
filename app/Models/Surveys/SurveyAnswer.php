@@ -20,4 +20,12 @@ class SurveyAnswer extends Model
 	public function user() {
 		return $this->belongsTo(User::class);
 	}
+
+	public function scopeOrderedByQuestion($query) {
+		return $query->orderBy('survey_question_id', 'ASC');
+	}
+
+	/*public function scopeOrderedByAnswer($query) {
+		return $query->orderByRaw('answer', 'ASC');
+	}*/
 }
