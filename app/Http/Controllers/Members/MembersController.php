@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Members;
 use App\Models\Members\User;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
 use App\Http\Controllers\Controller;
 
 class MembersController extends Controller {
 
-	public function index(User $user) {
+	public function index() {
 		/*$follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
 
 		$postCount = Cache::remember(
@@ -36,7 +37,13 @@ class MembersController extends Controller {
 			});
 
 		return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));*/
-		return view('members.dashboard');
+		$user = Auth::user();
+		$links = $user->getMemberLinks();
+		
+		if ($user->isAdmin()) {
+			array_unshift($links, ['text'=>'Admin Dashboard', 'href'=>'admin_dashboard', 'role'=>'any', 'icon'=>'<i class="fas fa-tachometer-alt"></i>']);
+		}
+		return view('members.dashboard', ['links'=>$links]);
 	}
 
 
