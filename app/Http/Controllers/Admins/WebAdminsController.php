@@ -27,6 +27,7 @@ class WebAdminsController extends Controller
 
     	if (!$page) {
 			$default_page = str_replace("/", "_", $path);
+			$page = new Page;
 			$page->content = Storage::get('default_pages/' . $default_page . '.html');
 			$page->path = $path;
 			$page->save();
