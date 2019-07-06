@@ -22,7 +22,7 @@ import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('registration-form', require('./components/RegistrationForm.vue').default);
+Vue.component('registration-form', require('./components/forms/RegistrationForm.vue').default);
 
 Vue.component('flash', require('./components/Flash.vue').default);
 Vue.component('invoice', require('./components/members/Invoice.vue').default);
@@ -30,10 +30,16 @@ Vue.component('invoices', require('./components/members/Invoices.vue').default);
 
 Vue.component('calendar', require('./components/Calendar.vue').default);
 Vue.component('volunteer-hours-chart', require('./components/members/VolunteerHoursChart.vue').default);
-Vue.component('volunteer-hours-form', require('./components/members/VolunteerHoursForm.vue').default);
+Vue.component('volunteer-hours-form', require('./components/forms/VolunteerHoursForm.vue').default);
+
+Vue.component('validation-form-base', require('./components/forms/ValidationFormBase.vue').default);
 
 
-Vue.component('calendar-event-form', require('./components/admins/CalendarEventForm.vue').default);
+Vue.component('survey-creation-form', require('./components/forms/SurveyCreationForm.vue').default);
+Vue.component('survey', require('./components/surveys/Survey.vue').default);
+
+
+Vue.component('calendar-event-form', require('./components/forms/CalendarEventForm.vue').default);
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 //Vue.component('wysiwyg', require('./components/Wysiwyg.vue').default);
 /**
