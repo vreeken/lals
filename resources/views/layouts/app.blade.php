@@ -37,6 +37,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha256-UzFD2WYH2U1dQpKDjjZK72VtPeWP50NoJjd26rnAdUI=" crossorigin="anonymous" />
+
     <style>
         /*
         body { padding-bottom: 100px; }
@@ -58,7 +60,7 @@
         @include ('layouts.nav')
 
 
-        <main class="py-4">
+        <main class="p-3">
             <div class="container">
                 <div class="row justify-content-center">
                     @yield('content')
