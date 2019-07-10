@@ -1,6 +1,5 @@
 //window._ = require('lodash');
 import InstantSearch from 'vue-instantsearch';
-import VueNoty from 'vuejs-noty';
 //window.Popper = require('popper.js').default;
 
 
@@ -15,18 +14,9 @@ require('bootstrap');
 window.Vue = require('vue');
 
 Vue.use(InstantSearch);
-Vue.use(VueNoty, {
-    layout   : 'bottomCenter',
-    theme    : 'metroui',
-    closeWith: ['click', 'button'],
-    timeout: 5000,
-    animation: {
-        open : 'animated fadeIn',
-        close: 'animated fadeOut'
-    }
-});
 
-//Vue.use(BootstrapVue);
+require('./helpers/noty.js');
+
 
 Vue.config.devtools = true;
 
