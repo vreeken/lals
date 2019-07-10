@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Models\Financials\Invoice;
 use App\Models\Forum\Channel;
 use App\Models\Members\User;
 use Illuminate\Http\Request;
@@ -14,6 +15,9 @@ use Log;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Controller;
+use Auth;
+use Stripe\Customer;
+use Stripe\Stripe;
 
 class PublicController extends Controller
 {
@@ -99,6 +103,63 @@ class PublicController extends Controller
 
 
     public function setupRoles(Request $request) {
+		/*
+		Stripe::setApiKey(env('STRIPE_SECRET'));
+
+		$user = Auth::user();
+
+		$customer = Customer::create([
+			'email' => $user->email,
+			'source' => null,
+			'name' => $user->getFullName(),
+			'address' => [
+				'line1' => $user->address_1,
+				'city' => $user->city,
+				'state' => $user->state,
+				'postal_code' => $user->zip,
+				'line2' => $user->address_2
+			],
+			'metadata' => [
+				'user_id' => $user->id
+			],
+			'phone' => $user->phone . ' ' . $user->phone_ext
+		]);
+
+		$user->stripe_id = $customer->id;
+		$user->save();
+
+		\Stripe\InvoiceItem::create([
+				'amount' => 100,
+				'currency' => 'usd',
+				'customer' => $user->stripe_id,
+				'description' => 'One-time setup fee',
+			]);
+
+			$invoice = \Stripe\Invoice::create([
+				'customer' => $user->stripe_id,
+				'billing' => 'send_invoice',
+				'days_until_due' => 30,
+			]);
+
+
+			$invoice->sendInvoice();
+
+			Invoice::create([
+				'stripe_invoice_id' => $invoice->id,
+				'invoice_number' => $invoice->number,
+				'user_id' => $user->id,
+				'status' => $invoice->status,
+				'due_date' => date("Y-m-d H:i:s", $invoice->due_date),
+				'amount_due' => $invoice->amount_due,
+				'amount_paid' => $invoice->amount_paid,
+				'invoice_pdf' => $invoice->invoice_pdf,
+				'failed_attempt_count' => $invoice->attempt_count,
+				'raw_stripe_create_data' => json_encode($invoice)
+			]);
+			return 'done 2';
+
+		*/
+
 		/*
 		 ****************************************************************
 		 *						 ROLES & PERMISSIONS
