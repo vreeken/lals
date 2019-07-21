@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-					<registration-form :errors="{{ json_encode($errors) }}" :old="{{ json_encode(Session::getOldInput()) }}"/>
+					<registration-form />
                 </div>
             </div>
         </div>
