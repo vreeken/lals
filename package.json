@@ -29,7 +29,7 @@
         "@fullcalendar/vue": "^4.2.2",
         "at.js": "^1.5.3",
         "bootstrap": "^4.3.1",
-        "chart.js": "^2.8.0",
+        "chart.js": "^2.9.4",
         "dayjs": "^1.8.15",
         "jquery.caret": "^0.3.1",
         "noty": "^3.2.0-beta",
